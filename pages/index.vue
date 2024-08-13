@@ -18,14 +18,20 @@
       <p>Temperature: {{ weather.main.temp }}°C</p>
       <p>Weather: {{ weather.weather[0].description }}</p>
     </div>
-    <div v-if="forecast">
+    <div v-if="groupedForecast">
       <h2>5-Day Forecast</h2>
-      <div v-for="item in forecast.list" :key="item.dt" class="forecast-item">
-        <p>
-          <strong>{{ formatDate(item.dt_txt) }}</strong>
-        </p>
-        <p>Temp: {{ item.main.temp }}°C</p>
-        <p>{{ item.weather[0].description }}</p>
+      <div
+        v-for="(items, date) in groupedForecast"
+        :key="date"
+        class="forecast-day"
+      >
+        <h3>{{ formatDate(date) }}</h3>
+        <div v-for="item in items" :key="item.dt" class="forecast-item">
+          <p>
+            {{ formatTime(item.dt_txt) }} - Temp: {{ item.main.temp }}°C -
+            {{ item.weather[0].description }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -79,6 +85,12 @@
     };
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', options);
+  };
+
+  const formatTime = (dateTimeString: string) => {
+    const options = { hour: '2-digit', minute: '2-digit' };
+    const date = new Date(dateTimeString);
+    return date.toLocaleTimeString('en-US', options);
   };
 </script>
 
