@@ -1,25 +1,20 @@
 <template>
   <div>
-    <h1>Weather App</h1>
+    <h1>{{ $t('weatherApp') }}</h1>
     <form @submit.prevent="getWeather">
-      <input
-        v-model="city"
-        type="text"
-        placeholder="Enter city name"
-        required
-      />
-      <button type="submit">Get Weather</button>
+      <input v-model="city" :placeholder="$t('enterCity')" required />
+      <button type="submit">{{ $t('getWeather') }}</button>
     </form>
     <div v-if="error" style="color: red">
-      <p>{{ error }}</p>
+      <p>{{ $t('error') }}: {{ error }}</p>
     </div>
     <div v-if="weather">
-      <h2>Current Weather in {{ weather.name }}</h2>
-      <p>Temperature: {{ weather.main.temp }}°C</p>
-      <p>Weather: {{ weather.weather[0].description }}</p>
+      <h2>{{ $t('currentWeather') }} {{ weather.name }}</h2>
+      <p>{{ $t('temperature') }}: {{ weather.main.temp }}°C</p>
+      <p>{{ $t('weather') }}: {{ weather.weather[0].description }}</p>
     </div>
     <div v-if="groupedForecast">
-      <h2>5-Day Forecast</h2>
+      <h2>{{ $t('forecast') }}</h2>
       <div
         v-for="(data, date) in groupedForecast"
         :key="date"
@@ -32,8 +27,8 @@
         />
         <div v-for="item in data.items" :key="item.dt" class="forecast-item">
           <p>
-            {{ formatTime(item.dt_txt) }} - Temp: {{ item.main.temp }}°C -
-            {{ item.weather[0].description }}
+            {{ formatTime(item.dt_txt) }} - {{ $t('temperature') }}:
+            {{ item.main.temp }}°C - {{ item.weather[0].description }}
           </p>
         </div>
       </div>

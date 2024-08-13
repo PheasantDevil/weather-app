@@ -1,0 +1,11 @@
+{
+    "weatherApp": "天気アプリ",
+    "enterCity": "都市名を入力",
+    "getWeather": "天気を取得",
+    "currentWeather": "現在の天気:",
+    "temperature": "温度",
+    "forecast": "5日間の予報",
+    "weather": "天気",
+    "error": "都市が見つかりません。再試行してください。"
+  }
+  

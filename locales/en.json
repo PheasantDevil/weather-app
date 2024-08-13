@@ -1,0 +1,11 @@
+{
+    "weatherApp": "Weather App",
+    "enterCity": "Enter city name",
+    "getWeather": "Get Weather",
+    "currentWeather": "Current Weather in",
+    "temperature": "Temperature",
+    "forecast": "5-Day Forecast",
+    "weather": "Weather",
+    "error": "City not found. Please try again."
+  }
+  
