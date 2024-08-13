@@ -14,9 +14,19 @@
       <p>{{ error }}</p>
     </div>
     <div v-if="weather">
-      <h2>Weather in {{ weather.name }}</h2>
+      <h2>Current Weather in {{ weather.name }}</h2>
       <p>Temperature: {{ weather.main.temp }}°C</p>
       <p>Weather: {{ weather.weather[0].description }}</p>
+    </div>
+    <div v-if="forecast">
+      <h2>5-Day Forecast</h2>
+      <div v-for="item in forecast.list" :key="item.dt" class="forecast-item">
+        <p>
+          <strong>{{ formatDate(item.dt_txt) }}</strong>
+        </p>
+        <p>Temp: {{ item.main.temp }}°C</p>
+        <p>{{ item.weather[0].description }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -36,6 +46,19 @@
       await fetchWeather(city.value);
       await fetchForecast(city.value);
     }
+  };
+
+  const formatDate = (dateString: string) => {
+    const options = {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', options);
   };
 </script>
 
@@ -72,5 +95,12 @@
   }
   p {
     margin: 5px 0;
+  }
+  .forecast-item {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #f9f9f9;
   }
 </style>
