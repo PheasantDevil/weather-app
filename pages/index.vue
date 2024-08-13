@@ -39,12 +39,32 @@
   const { weather, error, fetchWeather, fetchForecast, forecast } =
     useWeather();
 
+  const groupedForecast = ref<any>({});
+
+  const groupForecastByDate = () => {
+    if (forecast.value) {
+      groupedForecast.value = forecast.value.list.reduce(
+        (acc: any, item: any) => {
+          const date = item.dt_txt.split(' ')[0];
+          if (!acc[date]) {
+            acc[date] = [];
+          }
+          acc[date].push(item);
+          return acc;
+        },
+        {}
+      );
+    }
+  };
+
   const getWeather = async () => {
     error.value = '';
     weather.value = null;
+    groupedForecast.value = {};
     if (city.value) {
       await fetchWeather(city.value);
       await fetchForecast(city.value);
+      groupForecastByDate();
     }
   };
 
