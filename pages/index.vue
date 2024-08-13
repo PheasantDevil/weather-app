@@ -21,12 +21,16 @@
     <div v-if="groupedForecast">
       <h2>5-Day Forecast</h2>
       <div
-        v-for="(items, date) in groupedForecast"
+        v-for="(data, date) in groupedForecast"
         :key="date"
         class="forecast-day"
       >
         <h3>{{ formatDate(date) }}</h3>
-        <div v-for="item in items" :key="item.dt" class="forecast-item">
+        <img
+          :src="`https://openweathermap.org/img/wn/${data.icon}@2x.png`"
+          alt="Weather icon"
+        />
+        <div v-for="item in data.items" :key="item.dt" class="forecast-item">
           <p>
             {{ formatTime(item.dt_txt) }} - Temp: {{ item.main.temp }}°C -
             {{ item.weather[0].description }}
@@ -53,9 +57,12 @@
         (acc: any, item: any) => {
           const date = item.dt_txt.split(' ')[0];
           if (!acc[date]) {
-            acc[date] = [];
+            acc[date] = {
+              icon: item.weather[0].icon, // 最初の時間帯のアイコンを使用
+              items: [],
+            };
           }
-          acc[date].push(item);
+          acc[date].items.push(item);
           return acc;
         },
         {}
@@ -128,11 +135,14 @@
   p {
     margin: 5px 0;
   }
+  .forecast-day {
+    margin-bottom: 20px;
+  }
+  .forecast-day img {
+    vertical-align: middle;
+    margin-right: 10px;
+  }
   .forecast-item {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 10px;
-    margin: 10px 0;
-    background-color: #f9f9f9;
+    margin-left: 20px;
   }
 </style>
