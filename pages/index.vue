@@ -1,5 +1,6 @@
 <template>
   <div>
+    <LanguageSwitcher />
     <h1>{{ $t('weatherApp') }}</h1>
     <form @submit.prevent="getWeather">
       <input v-model="city" :placeholder="$t('enterCity')" required />
@@ -39,6 +40,7 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { useWeather } from '~/composables/useWeather';
+  import LanguageSwitcher from '~/components/LanguageSwitcher.vue';
 
   const city = ref('');
   const { weather, error, fetchWeather, fetchForecast, forecast } =
