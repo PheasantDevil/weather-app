@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 
-const API_KEY = 'YOUR_API_KEY';
+const API_KEY = 'ee6cfcb0e9c0f7601a366ae55bfdf4a5';
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/';
 
 export function useWeather() {

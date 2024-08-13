@@ -23,27 +23,18 @@
 
 <script setup lang="ts">
   import { ref } from 'vue';
+  import { useWeather } from '~/composables/useWeather';
 
   const city = ref('');
-  const weather = ref(null);
-  const error = ref('');
-  const apiKey = 'ee6cfcb0e9c0f7601a366ae55bfdf4a5';
+  const { weather, error, fetchWeather, fetchForecast, forecast } =
+    useWeather();
 
   const getWeather = async () => {
     error.value = '';
     weather.value = null;
     if (city.value) {
-      try {
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&units=metric&appid=${apiKey}`
-        );
-        if (!response.ok) {
-          throw new Error('City not found');
-        }
-        weather.value = await response.json();
-      } catch (err) {
-        error.value = 'Failed to fetch weather data. Please try again.';
-      }
+      await fetchWeather(city.value);
+      await fetchForecast(city.value);
     }
   };
 </script>
