@@ -14,37 +14,90 @@
       <p>{{ error }}</p>
     </div>
     <div v-if="weather">
-      <h2>Weather in {{ weather.name }}</h2>
+      <h2>Current Weather in {{ weather.name }}</h2>
       <p>Temperature: {{ weather.main.temp }}°C</p>
       <p>Weather: {{ weather.weather[0].description }}</p>
+    </div>
+    <div v-if="groupedForecast">
+      <h2>5-Day Forecast</h2>
+      <div
+        v-for="(data, date) in groupedForecast"
+        :key="date"
+        class="forecast-day"
+      >
+        <h3>{{ formatDate(date) }}</h3>
+        <img
+          :src="`https://openweathermap.org/img/wn/${data.icon}@2x.png`"
+          alt="Weather icon"
+        />
+        <div v-for="item in data.items" :key="item.dt" class="forecast-item">
+          <p>
+            {{ formatTime(item.dt_txt) }} - Temp: {{ item.main.temp }}°C -
+            {{ item.weather[0].description }}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import { ref } from 'vue';
+  import { useWeather } from '~/composables/useWeather';
 
   const city = ref('');
-  const weather = ref(null);
-  const error = ref('');
-  const apiKey = 'ee6cfcb0e9c0f7601a366ae55bfdf4a5';
+  const { weather, error, fetchWeather, fetchForecast, forecast } =
+    useWeather();
+
+  const groupedForecast = ref<any>({});
+
+  const groupForecastByDate = () => {
+    if (forecast.value) {
+      groupedForecast.value = forecast.value.list.reduce(
+        (acc: any, item: any) => {
+          const date = item.dt_txt.split(' ')[0];
+          if (!acc[date]) {
+            acc[date] = {
+              icon: item.weather[0].icon, // 最初の時間帯のアイコンを使用
+              items: [],
+            };
+          }
+          acc[date].items.push(item);
+          return acc;
+        },
+        {}
+      );
+    }
+  };
 
   const getWeather = async () => {
     error.value = '';
     weather.value = null;
+    groupedForecast.value = {};
     if (city.value) {
-      try {
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&units=metric&appid=${apiKey}`
-        );
-        if (!response.ok) {
-          throw new Error('City not found');
-        }
-        weather.value = await response.json();
-      } catch (err) {
-        error.value = 'Failed to fetch weather data. Please try again.';
-      }
+      await fetchWeather(city.value);
+      await fetchForecast(city.value);
+      groupForecastByDate();
     }
+  };
+
+  const formatDate = (dateString: string) => {
+    const options = {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', options);
+  };
+
+  const formatTime = (dateTimeString: string) => {
+    const options = { hour: '2-digit', minute: '2-digit' };
+    const date = new Date(dateTimeString);
+    return date.toLocaleTimeString('en-US', options);
   };
 </script>
 
@@ -81,5 +134,15 @@
   }
   p {
     margin: 5px 0;
+  }
+  .forecast-day {
+    margin-bottom: 20px;
+  }
+  .forecast-day img {
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+  .forecast-item {
+    margin-left: 20px;
   }
 </style>
