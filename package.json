@@ -10,7 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxtjs/i18n": "^8.3.3",
     "nuxt": "^3.12.4",
-    "vue": "latest"
-  }
+    "vue": "^3.4.38"
+  },
+  "packageManager": "yarn@4.4.0"
 }
