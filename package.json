@@ -12,6 +12,8 @@
   "dependencies": {
     "@nuxtjs/i18n": "^8.3.3",
     "nuxt": "^3.12.4",
+    "path-browserify": "^1.0.1",
+    "vite": "^5.4.4",
     "vue": "^3.4.38"
   },
   "packageManager": "yarn@4.4.0"

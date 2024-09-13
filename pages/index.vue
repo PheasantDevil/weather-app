@@ -6,6 +6,16 @@
       <input v-model="city" :placeholder="$t('enterCity')" required />
       <button type="submit">{{ $t('getWeather') }}</button>
     </form>
+
+    <!-- 注記を追加 -->
+    <div class="notes">
+      <p>・都市の漢字（EX：東京）または英称（tokyo）を入力してください</p>
+      <p>・現在平仮名、片仮名には対応していません（今後アップデート予定）</p>
+      <p>
+        ・検索後赤字のエラーが表示された場合、結果が正常ではない可能性があります
+      </p>
+    </div>
+
     <div v-if="error" style="color: red">
       <p>{{ $t('error') }}: {{ error }}</p>
     </div>
@@ -14,7 +24,7 @@
       <p>{{ $t('temperature') }}: {{ weather.main.temp }}°C</p>
       <p>{{ $t('weather') }}: {{ weather.weather[0].description }}</p>
     </div>
-    <div v-if="groupedForecast">
+    <div v-if="groupedForecast && weather">
       <h2>{{ $t('forecast') }}</h2>
       <div
         v-for="(data, date) in groupedForecast"
@@ -39,8 +49,8 @@
 
 <script setup lang="ts">
   import { ref } from 'vue';
-  import { useWeather } from '~/composables/useWeather';
   import LanguageSwitcher from '~/components/LanguageSwitcher.vue';
+  import { useWeather } from '~/composables/useWeather';
 
   const city = ref('');
   const { weather, error, fetchWeather, fetchForecast, forecast } =
