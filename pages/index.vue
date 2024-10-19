@@ -78,13 +78,19 @@
   };
 
   const getWeather = async () => {
-    error.value = '';
-    weather.value = null;
-    groupedForecast.value = {};
-    if (city.value) {
-      await fetchWeather(city.value);
-      await fetchForecast(city.value);
-      groupForecastByDate();
+    try {
+      error.value = '';
+      weather.value = null;
+      groupedForecast.value = {};
+      if (city.value) {
+        await fetchWeather(city.value);
+        await fetchForecast(city.value);
+        groupForecastByDate();
+      }
+    } catch (err) {
+      console.error('Error getting weather:', err);
+      error.value =
+        '天気データの取得中にエラーが発生しました。もう一度お試しください。';
     }
   };
 
