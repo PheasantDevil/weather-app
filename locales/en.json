@@ -1,11 +1,23 @@
 {
-    "weatherApp": "Weather App",
-    "enterCity": "Enter city name",
-    "getWeather": "Get Weather",
-    "currentWeather": "Current Weather in",
-    "temperature": "Temperature",
-    "forecast": "5-Day Forecast",
-    "weather": "Weather",
-    "error": "City not found. Please try again."
+  "weatherApp": "Weather App",
+  "enterCity": "Enter city name",
+  "getWeather": "Get Weather",
+  "loading": "Loading...",
+  "currentWeather": "Current Weather in",
+  "temperature": "Temperature",
+  "feelsLike": "Feels like",
+  "forecast": "5-Day Forecast",
+  "weather": "Weather",
+  "averageTemp": "Average Temperature",
+  "guidelines": {
+    "kanji": "• Enter city name in kanji (e.g. 東京) or English (e.g. tokyo)",
+    "kana": "• Hiragana and katakana are currently not supported (update planned)",
+    "error": "• If you see a red error message, the results may not be accurate"
+  },
+  "errors": {
+    "API_ERROR": "Failed to fetch weather data: {message}",
+    "CITY_NOT_FOUND": "City not found. Please try again.",
+    "NETWORK_ERROR": "Network error. Please check your connection.",
+    "UNKNOWN_ERROR": "An unexpected error occurred. Please try again."
   }
-  
+}

@@ -1,11 +1,23 @@
 {
-    "weatherApp": "天気アプリ",
-    "enterCity": "都市名を入力",
-    "getWeather": "天気を取得",
-    "currentWeather": "現在の天気:",
-    "temperature": "温度",
-    "forecast": "5日間の予報",
-    "weather": "天気",
-    "error": "都市が見つかりません。再試行してください。"
+  "weatherApp": "天気アプリ",
+  "enterCity": "都市名を入力",
+  "getWeather": "天気を取得",
+  "loading": "読み込み中...",
+  "currentWeather": "現在の天気:",
+  "temperature": "気温",
+  "feelsLike": "体感温度",
+  "forecast": "5日間の予報",
+  "weather": "天気",
+  "averageTemp": "平均気温",
+  "guidelines": {
+    "kanji": "• 都市の漢字（例：東京）または英語表記（例：tokyo）を入力してください",
+    "kana": "• 現在、ひらがなとカタカナには対応していません（今後アップデート予定）",
+    "error": "• 赤字のエラーが表示された場合、結果が正確でない可能性があります"
+  },
+  "errors": {
+    "API_ERROR": "天気データの取得に失敗しました: {message}",
+    "CITY_NOT_FOUND": "都市が見つかりません。再度お試しください。",
+    "NETWORK_ERROR": "ネットワークエラーが発生しました。接続を確認してください。",
+    "UNKNOWN_ERROR": "予期せぬエラーが発生しました。再度お試しください。"
   }
-  
+}

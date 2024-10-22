@@ -1,161 +1,125 @@
 <template>
-  <div>
-    <LanguageSwitcher />
+  <div class="weather-app">
+    <LanguageSwitcher class="language-switcher" />
     <h1>{{ $t('weatherApp') }}</h1>
-    <form @submit.prevent="getWeather">
-      <input v-model="city" :placeholder="$t('enterCity')" required />
-      <button type="submit">{{ $t('getWeather') }}</button>
+
+    <form @submit.prevent="getWeather" class="search-form">
+      <div class="input-group">
+        <input
+          v-model="city"
+          :placeholder="$t('enterCity')"
+          :disabled="isLoading"
+          class="city-input"
+          required
+        />
+        <button type="submit" :disabled="isLoading" class="submit-button">
+          {{ isLoading ? $t('loading') : $t('getWeather') }}
+        </button>
+      </div>
     </form>
 
-    <!-- 注記を追加 -->
-    <div class="notes">
-      <p>・都市の漢字（EX：東京）または英称（tokyo）を入力してください</p>
-      <p>・現在平仮名、片仮名には対応していません（今後アップデート予定）</p>
-      <p>
-        ・検索後赤字のエラーが表示された場合、結果が正常ではない可能性があります
-      </p>
+    <div v-if="showGuidelines" class="guidelines">
+      <p>{{ $t('guidelines.kanji') }}</p>
+      <p>{{ $t('guidelines.kana') }}</p>
+      <p>{{ $t('guidelines.error') }}</p>
     </div>
 
-    <div v-if="error" style="color: red">
-      <p>{{ $t('error') }}: {{ error }}</p>
+    <div v-if="error" class="error-message">
+      <p>{{ $t(`errors.${error.code}`, { message: error.message }) }}</p>
     </div>
-    <div v-if="weather">
-      <h2>{{ $t('currentWeather') }} {{ weather.name }}</h2>
-      <p>{{ $t('temperature') }}: {{ weather.main.temp }}°C</p>
-      <p>{{ $t('weather') }}: {{ weather.weather[0].description }}</p>
-    </div>
-    <div v-if="groupedForecast && weather">
-      <h2>{{ $t('forecast') }}</h2>
-      <div
-        v-for="(data, date) in groupedForecast"
-        :key="date"
-        class="forecast-day"
-      >
-        <h3>{{ formatDate(date) }}</h3>
-        <img
-          :src="`https://openweathermap.org/img/wn/${data.icon}@2x.png`"
-          alt="Weather icon"
-        />
-        <div v-for="item in data.items" :key="item.dt" class="forecast-item">
-          <p>
-            {{ formatTime(item.dt_txt) }} - {{ $t('temperature') }}:
-            {{ item.main.temp }}°C - {{ item.weather[0].description }}
-          </p>
-        </div>
-      </div>
-    </div>
+
+    <WeatherDisplay :weather="weather" v-if="weather" />
+    <ForecastDisplay
+      :grouped-forecast="groupedForecast"
+      v-if="groupedForecast"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
   import { ref } from 'vue';
-  import LanguageSwitcher from '~/components/LanguageSwitcher.vue';
   import { useWeather } from '~/composables/useWeather';
 
   const city = ref('');
-  const { weather, error, fetchWeather, fetchForecast, forecast } =
+  const showGuidelines = ref(true);
+  const { weather, groupedForecast, error, isLoading, fetchWeatherData } =
     useWeather();
 
-  const groupedForecast = ref<any>({});
-
-  const groupForecastByDate = () => {
-    if (forecast.value) {
-      groupedForecast.value = forecast.value.list.reduce(
-        (acc: any, item: any) => {
-          const date = item.dt_txt.split(' ')[0];
-          if (!acc[date]) {
-            acc[date] = {
-              icon: item.weather[0].icon, // 最初の時間帯のアイコンを使用
-              items: [],
-            };
-          }
-          acc[date].items.push(item);
-          return acc;
-        },
-        {}
-      );
-    }
-  };
-
   const getWeather = async () => {
+    if (!city.value.trim()) return;
+
     try {
-      error.value = '';
-      weather.value = null;
-      groupedForecast.value = {};
-      if (city.value) {
-        await fetchWeather(city.value);
-        await fetchForecast(city.value);
-        groupForecastByDate();
-      }
+      await fetchWeatherData(city.value);
+      showGuidelines.value = false;
     } catch (err) {
-      console.error('Error getting weather:', err);
-      error.value =
-        '天気データの取得中にエラーが発生しました。もう一度お試しください。';
+      console.error('Failed to fetch weather data:', err);
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    const options = {
-      weekday: 'short',
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    };
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', options);
-  };
-
-  const formatTime = (dateTimeString: string) => {
-    const options = { hour: '2-digit', minute: '2-digit' };
-    const date = new Date(dateTimeString);
-    return date.toLocaleTimeString('en-US', options);
   };
 </script>
 
 <style scoped>
-  div {
-    text-align: center;
-    margin: 20px;
-    font-family: Arial, sans-serif;
+  .weather-app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
   }
-  input {
-    padding: 10px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
+
+  .language-switcher {
+    margin-bottom: 2rem;
+  }
+
+  .search-form {
+    margin: 2rem 0;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .city-input {
+    padding: 0.75rem 1rem;
+    border: 2px solid #ddd;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
   }
-  button {
-    padding: 10px 15px;
-    background-color: #007bff;
+
+  .submit-button {
+    padding: 0.75rem 1.5rem;
+    background-color: #0066cc;
     color: white;
     border: none;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 1rem;
     cursor: pointer;
+    transition: background-color 0.2s;
   }
-  button:hover {
-    background-color: #0056b3;
+
+  .submit-button:hover:not(:disabled) {
+    background-color: #0052a3;
   }
-  h1 {
-    margin-bottom: 20px;
+
+  .submit-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
   }
-  h2 {
-    margin-top: 20px;
+
+  .guidelines {
+    margin: 2rem 0;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    color: #666;
   }
-  p {
-    margin: 5px 0;
-  }
-  .forecast-day {
-    margin-bottom: 20px;
-  }
-  .forecast-day img {
-    vertical-align: middle;
-    margin-right: 10px;
-  }
-  .forecast-item {
-    margin-left: 20px;
+
+  .error-message {
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: #fee;
+    border-radius: 4px;
+    color: #c00;
   }
 </style>
