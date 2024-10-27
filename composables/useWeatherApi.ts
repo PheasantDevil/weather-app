@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import type { WeatherError } from '~/types/weather';
+import { API_CONSTANTS } from '~/constants/api';
 
 export function useWeatherApi() {
   const isLoading = ref(false);

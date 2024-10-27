@@ -9,6 +9,7 @@ export function useWeather() {
   const weather = ref(null);
   const forecast = ref(null);
   const error = ref('');
+  const isLoading = ref(false);
 
   const fetchGeoNamesData = async (city: string) => {
     try {
@@ -31,37 +32,35 @@ export function useWeather() {
     }
   };
 
-  const fetchWeather = async (city: string) => {
+  const fetchWeatherData = async (city: string) => {
+    isLoading.value = true;
+    error.value = '';
     try {
       const englishCityName = await fetchGeoNamesData(city);
-      const response = await fetch(
+      
+      // 天気データの取得
+      const weatherResponse = await fetch(
         `${BASE_URL}weather?q=${englishCityName}&appid=${API_KEY}&units=metric`
       );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (!weatherResponse.ok) {
+        throw new Error(`HTTP error! status: ${weatherResponse.status}`);
       }
-      weather.value = await response.json();
+      weather.value = await weatherResponse.json();
+
+      // 予報データの取得
+      const forecastResponse = await fetch(
+        `${BASE_URL}forecast?q=${englishCityName}&appid=${API_KEY}&units=metric`
+      );
+      if (!forecastResponse.ok) {
+        throw new Error(`HTTP error! status: ${forecastResponse.status}`);
+      }
+      forecast.value = await forecastResponse.json();
     } catch (err) {
       console.error('Error fetching weather data:', err);
       error.value = 'Failed to fetch weather data. Please try again.';
       throw err;
-    }
-  };
-
-  const fetchForecast = async (city: string) => {
-    try {
-      const englishCityName = await fetchGeoNamesData(city);
-      const response = await fetch(
-        `${BASE_URL}forecast?q=${englishCityName}&appid=${API_KEY}&units=metric`
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      forecast.value = await response.json();
-    } catch (err) {
-      console.error('Error fetching forecast data:', err);
-      error.value = 'Failed to fetch forecast data. Please try again.';
-      throw err;
+    } finally {
+      isLoading.value = false;
     }
   };
 
@@ -69,7 +68,7 @@ export function useWeather() {
     weather,
     forecast,
     error,
-    fetchWeather,
-    fetchForecast,
+    isLoading,
+    fetchWeatherData,
   };
 }

@@ -3,6 +3,7 @@ import type {
   ForecastItem,
   GroupedForecast,
 } from '~/types/weather';
+import { API_CONSTANTS } from '~/constants/api';
 
 export const groupForecastByDate = (
   forecast: ForecastData
