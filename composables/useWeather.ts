@@ -1,4 +1,6 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { groupForecastByDate } from '~/utils/weatherUtils';
+import type { WeatherData, ForecastData, GroupedForecast } from '~/types/weather';
 
 const API_KEY = 'ee6cfcb0e9c0f7601a366ae55bfdf4a5';
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/';
@@ -6,10 +8,14 @@ const GEO_NAMES_USERNAME = 'konishikenji';
 const GEO_NAMES_URL = 'https://secure.geonames.org/searchJSON';
 
 export function useWeather() {
-  const weather = ref(null);
-  const forecast = ref(null);
+  const weather = ref<WeatherData | null>(null);
+  const forecast = ref<ForecastData | null>(null);
   const error = ref('');
   const isLoading = ref(false);
+
+  const groupedForecast = computed<GroupedForecast | null>(() => {
+    return forecast.value ? groupForecastByDate(forecast.value) : null;
+  });
 
   const fetchGeoNamesData = async (city: string) => {
     try {
@@ -67,6 +73,7 @@ export function useWeather() {
   return {
     weather,
     forecast,
+    groupedForecast,
     error,
     isLoading,
     fetchWeatherData,

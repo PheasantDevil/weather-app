@@ -28,7 +28,7 @@
       <p>{{ $t(`errors.${error.code}`, { message: error.message }) }}</p>
     </div>
 
-    <WeatherDisplay :weather="weather" v-if="weather" />
+    <WeatherDisplay :weather="weather" :forecast="forecast?.list" v-if="weather && forecast" />
     <ForecastDisplay
       :grouped-forecast="groupedForecast"
       v-if="groupedForecast"
@@ -42,7 +42,7 @@
 
   const city = ref('');
   const showGuidelines = ref(true);
-  const { weather, groupedForecast, error, isLoading, fetchWeatherData } =
+  const { weather, forecast, groupedForecast, error, isLoading, fetchWeatherData } =
     useWeather();
 
   const getWeather = async () => {
