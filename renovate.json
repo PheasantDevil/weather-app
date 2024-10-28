@@ -1,22 +1,24 @@
 {
   "extends": ["config:base"],
   "labels": ["dependencies"],
+  "baseBranches": ["main", "develop"],
   "packageRules": [
     {
+      "matchBaseBranches": ["main"],
       "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
-      "automergeType": "pr",
-      "excludePackagePatterns": ["*"],
-      "prConcurrentLimit": 5
-    },
-    {
-      "matchUpdateTypes": ["major"],
       "automerge": false,
       "prConcurrentLimit": 5
     },
     {
-      "matchUpdateTypes": ["minor"],
-      "excludePackagePatterns": ["@*"],
+      "matchBaseBranches": ["develop"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "pr",
+      "prConcurrentLimit": 5
+    },
+    {
+      "matchBaseBranches": ["develop"],
+      "matchUpdateTypes": ["major"],
       "automerge": false
     }
   ],
