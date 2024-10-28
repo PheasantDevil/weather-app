@@ -4,7 +4,7 @@
     <h1>{{ $t('weatherApp') }}</h1>
 
     <form @submit.prevent="getWeather" class="search-form">
-      <div class="input-group">
+      <div :class="['weather-app', backgroundClass]">
         <input
           v-model="city"
           :placeholder="$t('enterCity')"
@@ -28,7 +28,11 @@
       <p>{{ $t(`errors.${error.code}`, { message: error.message }) }}</p>
     </div>
 
-    <WeatherDisplay :weather="weather" :forecast="forecast?.list" v-if="weather && forecast" />
+    <WeatherDisplay
+      :weather="weather"
+      :forecast="forecast?.list"
+      v-if="weather && forecast"
+    />
     <ForecastDisplay
       :grouped-forecast="groupedForecast"
       v-if="groupedForecast"
@@ -37,13 +41,30 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { useWeather } from '~/composables/useWeather';
+import { ref, onMounted } from 'vue';
+import { useWeather } from '~/composables/useWeather';
 
   const city = ref('');
   const showGuidelines = ref(true);
-  const { weather, forecast, groupedForecast, error, isLoading, fetchWeatherData } =
-    useWeather();
+  const {
+    weather,
+    forecast,
+    groupedForecast,
+    error,
+    isLoading,
+    fetchWeatherData,
+  } = useWeather();
+  const backgroundClass = ref('');
+
+  onMounted(async () => {
+  // ランダムで天気条件を取得
+  await fetchWeatherData('Tokyo'); // 'Tokyo' などのデフォルトの都市を指定
+
+  const weatherConditions = ['sunny', 'rainy', 'cloudy'];
+    const randomCondition =
+      weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
+    backgroundClass.value = `${randomCondition}-background`;
+  });
 
   const getWeather = async () => {
     if (!city.value.trim()) return;
@@ -70,12 +91,6 @@
 
   .search-form {
     margin: 2rem 0;
-  }
-
-  .input-group {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
   }
 
   .city-input {
@@ -121,5 +136,60 @@
     background-color: #fee;
     border-radius: 4px;
     color: #c00;
+  }
+
+  .sunny-background {
+    background: linear-gradient(to bottom, #87ceeb, #ffd700);
+    animation: sunnyEffect 15s linear infinite;
+  }
+
+  .rainy-background {
+    background: #3f3f3f;
+    overflow: hidden;
+  }
+
+  .rainy-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/path/to/rain-drop.png');
+    background-size: contain;
+    opacity: 0.2;
+    animation: rainEffect 1s linear infinite;
+  }
+
+  .cloudy-background {
+    background: linear-gradient(to bottom, #d3d3d3, #a9a9a9);
+    animation: cloudyEffect 20s linear infinite;
+  }
+
+  @keyframes sunnyEffect {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+
+  @keyframes rainEffect {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes cloudyEffect {
+    0% {
+      opacity: 0.8;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 </style>
