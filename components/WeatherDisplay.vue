@@ -8,7 +8,13 @@
           :alt="weather.weather[0].description"
           class="weather-icon"
         />
-        <div :class="['weather-display', backgroundClass]">
+        <div
+          :class="[
+            'weather-display',
+            backgroundClass,
+            { 'animated-background': isAnimated },
+          ]"
+        >
           <p class="temperature">
             {{ $t('temperature') }}: {{ formatTemperature(weather.main.temp) }}
           </p>
@@ -71,6 +77,12 @@
       default:
         return 'default-background';
     }
+  });
+
+  const isAnimated = computed(() => {
+    const icon = props.weather?.weather[0].icon;
+    // アニメーションが必要な天気コードを指定
+    return ['10d', '10n', '01d', '01n'].includes(icon);
   });
 </script>
 
@@ -192,5 +204,9 @@
     100% {
       transform: translateY(100%);
     }
+  }
+
+  .animated-background {
+    transition: background 0.5s ease-in-out;
   }
 </style>
