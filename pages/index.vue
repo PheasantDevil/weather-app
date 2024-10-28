@@ -41,8 +41,8 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { useWeather } from '~/composables/useWeather';
+import { ref, onMounted } from 'vue';
+import { useWeather } from '~/composables/useWeather';
 
   const city = ref('');
   const showGuidelines = ref(true);
@@ -56,8 +56,11 @@
   } = useWeather();
   const backgroundClass = ref('');
 
-  onMounted(() => {
-    const weatherConditions = ['sunny', 'rainy', 'cloudy'];
+  onMounted(async () => {
+  // ランダムで天気条件を取得
+  await fetchWeatherData('Tokyo'); // 'Tokyo' などのデフォルトの都市を指定
+
+  const weatherConditions = ['sunny', 'rainy', 'cloudy'];
     const randomCondition =
       weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
     backgroundClass.value = `${randomCondition}-background`;
