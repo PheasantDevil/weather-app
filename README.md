@@ -74,6 +74,14 @@ bun run preview
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
+# ブランチ運用について
+それぞれのブランチにmergeがあるとVercelでデプロイが走ります。
+
+- main
+公開用
+-develop
+開発用
+
 # Claude や ChatGPT にリポジトリを丸ごと読み込ませるコマンド
 
 以下のコマンドを実行することでリポジトリ一式をテキストファイル（`repopack-output.txt`）を出力することができます。
