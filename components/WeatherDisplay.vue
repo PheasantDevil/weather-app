@@ -143,4 +143,54 @@
     font-size: 0.9rem;
     margin: 0.25rem 0;
   }
+
+  /* 晴れの背景 */
+  .sunny-background {
+    background: linear-gradient(to bottom, #87ceeb, #f0e68c);
+    animation: sunnyEffect 20s linear infinite;
+  }
+
+  /* 雨の背景 */
+  .rainy-background {
+    background: #a0a0a0;
+    overflow: hidden;
+  }
+
+  /* 雨のアニメーション */
+  .rainy-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/path/to/rain-drop.png'); /* 雨粒画像を指定 */
+    background-size: contain;
+    opacity: 0.3;
+    animation: rainEffect 0.5s linear infinite;
+  }
+
+  /* デフォルト背景 */
+  .default-background {
+    background: #d3d3d3;
+  }
+
+  /* アニメーション定義 */
+  @keyframes sunnyEffect {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 100% 100%;
+    }
+  }
+
+  @keyframes rainEffect {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
 </style>
