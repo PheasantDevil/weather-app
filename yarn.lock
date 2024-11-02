@@ -6825,8 +6825,8 @@ __metadata:
   linkType: hard
 
 "repopack@npm:^0.1.43":
-  version: 0.1.44
-  resolution: "repopack@npm:0.1.44"
+  version: 0.1.45
+  resolution: "repopack@npm:0.1.45"
   dependencies:
     "@clack/prompts": "npm:^0.7.0"
     "@secretlint/core": "npm:^9.0.0"
@@ -6845,7 +6845,7 @@ __metadata:
     tiktoken: "npm:^1.0.17"
   bin:
     repopack: bin/repopack.cjs
-  checksum: 10c0/f65c20f1355881dcb69f486a1a704a98e83a433ab00018833cff9f0fe45b22964b488756c9a48d20bbd658367a5505b74039dd83140311deb1a313ab83383ed6
+  checksum: 10c0/b4d779a83aeeafe7f957434d4ee4907dc8a9459df4eac7bf81cfcd69a4fbc6af39902035bb97abc4dbcacdc0dbd2b86567e6ea117e3fea1881849f72b9b92ed9
   languageName: node
   linkType: hard
 
