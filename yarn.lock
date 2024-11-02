@@ -1936,36 +1936,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@secretlint/core@npm:^8.4.0":
-  version: 8.5.0
-  resolution: "@secretlint/core@npm:8.5.0"
+"@secretlint/core@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@secretlint/core@npm:9.0.0"
   dependencies:
-    "@secretlint/profiler": "npm:^8.5.0"
-    "@secretlint/types": "npm:^8.5.0"
+    "@secretlint/profiler": "npm:^9.0.0"
+    "@secretlint/types": "npm:^9.0.0"
     debug: "npm:^4.3.7"
     structured-source: "npm:^4.0.0"
-  checksum: 10c0/52542b2bf1b297d2749df58ad1abc41c501fcfd7fe2370d545c891722acb4ed55d62431248edde37dce517735eb55b6332904fb3481304b6d22323738f2d9eb4
+  checksum: 10c0/e6a55747366f2c310110c186cd13d81b0c5445d539e1a758505e75bd3964a193b0272375273ffd62c502d4e4a33f16d36643403aa165392fd3081271b584f8d2
   languageName: node
   linkType: hard
 
-"@secretlint/profiler@npm:^8.5.0":
-  version: 8.5.0
-  resolution: "@secretlint/profiler@npm:8.5.0"
-  checksum: 10c0/8cd1db839f9926e57a7c83a5e033b910ae923886a4076712789a354a0ed0ea8b9780e3750a9d2c784c483cfa9a9432042681931a7a4a0ac4b90603ebcc2ec383
+"@secretlint/profiler@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@secretlint/profiler@npm:9.0.0"
+  checksum: 10c0/0a76df040f38154f4c59e9f64b38c931c715efdee9c21faea9f28cef321e1385ed7252a11b2002642a74eb64f8bae57f92d94a3f4d3a62e0011a106273819641
   languageName: node
   linkType: hard
 
-"@secretlint/secretlint-rule-preset-recommend@npm:^8.4.0":
-  version: 8.5.0
-  resolution: "@secretlint/secretlint-rule-preset-recommend@npm:8.5.0"
-  checksum: 10c0/fc05f6c0b15d5edde176d7becdc21d1563c93b4d072f3c8fb84280ba3d27ede068b0fef504c7d65695613b80bcec5a163343d56138068e54737827d2f7468b70
+"@secretlint/secretlint-rule-preset-recommend@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@secretlint/secretlint-rule-preset-recommend@npm:9.0.0"
+  checksum: 10c0/237d3d69b65a86cff055ed086be26ad39a8b6fddf35445f2fab58d28dff852d90e0dc2cf60bb9dc9a2c0acaa8d1c9ba0376b4150dd9e092ecc44522ecf1b2dc5
   languageName: node
   linkType: hard
 
-"@secretlint/types@npm:^8.5.0":
-  version: 8.5.0
-  resolution: "@secretlint/types@npm:8.5.0"
-  checksum: 10c0/05ee2bcc729856d6cff2caee5306724a0fa92844abb458d39a61980bdfb96d3dece3121571aab400af7b54eaf34904db7178f0c9213694d1dd0a15bdf256e02d
+"@secretlint/types@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@secretlint/types@npm:9.0.0"
+  checksum: 10c0/de11317a1f43419d0350db7e8bd831ee30eba2df242a7dfc9696954e88c9507bced35c32490dba181f30a65289f875ad3c1610ce1e1c36b19245448525267736
   languageName: node
   linkType: hard
 
@@ -6264,6 +6264,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"picocolors@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "picocolors@npm:1.1.1"
+  checksum: 10c0/e2e3e8170ab9d7c7421969adaa7e1b31434f789afb9b3f115f6b96d91945041ac3ceb02e9ec6fe6510ff036bcc0bf91e69a1772edc0b707e12b19c0f2d6bcf58
+  languageName: node
+  linkType: hard
+
 "picomatch@npm:^2.0.4, picomatch@npm:^2.2.1, picomatch@npm:^2.2.2, picomatch@npm:^2.3.1":
   version: 2.3.1
   resolution: "picomatch@npm:2.3.1"
@@ -6818,12 +6825,12 @@ __metadata:
   linkType: hard
 
 "repopack@npm:^0.1.43":
-  version: 0.1.43
-  resolution: "repopack@npm:0.1.43"
+  version: 0.1.44
+  resolution: "repopack@npm:0.1.44"
   dependencies:
     "@clack/prompts": "npm:^0.7.0"
-    "@secretlint/core": "npm:^8.4.0"
-    "@secretlint/secretlint-rule-preset-recommend": "npm:^8.4.0"
+    "@secretlint/core": "npm:^9.0.0"
+    "@secretlint/secretlint-rule-preset-recommend": "npm:^9.0.0"
     cli-spinners: "npm:^2.9.2"
     commander: "npm:^12.1.0"
     globby: "npm:^14.0.2"
@@ -6833,12 +6840,12 @@ __metadata:
     jschardet: "npm:^3.1.4"
     log-update: "npm:^6.1.0"
     p-map: "npm:^7.0.2"
-    picocolors: "npm:^1.1.0"
+    picocolors: "npm:^1.1.1"
     strip-comments: "npm:^2.0.1"
     tiktoken: "npm:^1.0.17"
   bin:
     repopack: bin/repopack.cjs
-  checksum: 10c0/8153a47957549bc5bccefdc66b6cafc4bf5bd2750ba86e7942a9fbddd41deba32c305d3c2cb6e01b2471882278b2206dfe93710c20f1bc969267bfe8908c50cd
+  checksum: 10c0/f65c20f1355881dcb69f486a1a704a98e83a433ab00018833cff9f0fe45b22964b488756c9a48d20bbd658367a5505b74039dd83140311deb1a313ab83383ed6
   languageName: node
   linkType: hard
 
