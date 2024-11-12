@@ -127,6 +127,7 @@ const backgroundClass = computed(() => {
   background: transparent;
   animation: lightningEffect 5s infinite;
   pointer-events: none;
+  z-index: 1;
 }
 
 @keyframes sunnyEffect {
@@ -176,6 +177,34 @@ const backgroundClass = computed(() => {
   }
   97%, 100% {
     background: transparent;
+  }
+}
+
+/* モバイル対応のアニメーション調整 */
+@media (max-width: 768px) {
+  .rainy-background::before,
+  .snow-background::before,
+  .thunderstorm-background::before {
+    animation-duration: 0.8s; /* モバイルでは少し速く */
+  }
+
+  .clear-background {
+    animation-duration: 15s; /* モバイルでは少し遅く */
+  }
+}
+
+/* パフォーマンス最適化のための追加 */
+@media (prefers-reduced-motion: reduce) {
+  .weather-background {
+    transition: none;
+  }
+
+  .clear-background,
+  .rainy-background::before,
+  .snow-background::before,
+  .thunderstorm-background::before,
+  .thunderstorm-background::after {
+    animation: none;
   }
 }
 </style> 
