@@ -1,43 +1,45 @@
 <template>
-  <div :class="['weather-app', backgroundClass]">
-    <LanguageSwitcher class="language-switcher" />
-    <h1>{{ $t('weatherApp') }}</h1>
+  <WeatherBackground :weather="weather">
+    <div class="weather-app">
+      <LanguageSwitcher class="language-switcher" />
+      <h1>{{ $t('weatherApp') }}</h1>
 
-    <form @submit.prevent="getWeather" class="search-form">
-      <div :class="['weather-app', backgroundClass]">
-        <input
-          v-model="city"
-          :placeholder="$t('enterCity')"
-          :disabled="isLoading"
-          class="city-input"
-          required
-        />
-        <button type="submit" :disabled="isLoading" class="submit-button">
-          {{ isLoading ? $t('loading') : $t('getWeather') }}
-        </button>
+      <form @submit.prevent="getWeather" class="search-form">
+        <div :class="['weather-app']">
+          <input
+            v-model="city"
+            :placeholder="$t('enterCity')"
+            :disabled="isLoading"
+            class="city-input"
+            required
+          />
+          <button type="submit" :disabled="isLoading" class="submit-button">
+            {{ isLoading ? $t('loading') : $t('getWeather') }}
+          </button>
+        </div>
+      </form>
+
+      <div v-if="showGuidelines" class="guidelines">
+        <p>{{ $t('guidelines.kanji') }}</p>
+        <p>{{ $t('guidelines.kana') }}</p>
+        <p>{{ $t('guidelines.error') }}</p>
       </div>
-    </form>
 
-    <div v-if="showGuidelines" class="guidelines">
-      <p>{{ $t('guidelines.kanji') }}</p>
-      <p>{{ $t('guidelines.kana') }}</p>
-      <p>{{ $t('guidelines.error') }}</p>
+      <div v-if="error" class="error-message">
+        <p>{{ $t(`errors.${error.code}`, { message: error.message }) }}</p>
+      </div>
+
+      <WeatherDisplay
+        :weather="weather"
+        :forecast="forecast?.list"
+        v-if="weather && forecast"
+      />
+      <ForecastDisplay
+        :grouped-forecast="groupedForecast"
+        v-if="groupedForecast"
+      />
     </div>
-
-    <div v-if="error" class="error-message">
-      <p>{{ $t(`errors.${error.code}`, { message: error.message }) }}</p>
-    </div>
-
-    <WeatherDisplay
-      :weather="weather"
-      :forecast="forecast?.list"
-      v-if="weather && forecast"
-    />
-    <ForecastDisplay
-      :grouped-forecast="groupedForecast"
-      v-if="groupedForecast"
-    />
-  </div>
+  </WeatherBackground>
 </template>
 
 <script setup lang="ts">
@@ -54,16 +56,10 @@ import { useWeather } from '~/composables/useWeather';
     isLoading,
     fetchWeatherData,
   } = useWeather();
-  const backgroundClass = ref('');
 
   onMounted(async () => {
   // ランダムで天気条件を取得
   await fetchWeatherData('Tokyo'); // 'Tokyo' などのデフォルトの都市を指定
-
-  const weatherConditions = ['sunny', 'rainy', 'cloudy'];
-    const randomCondition =
-      weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
-    backgroundClass.value = `${randomCondition}-background`;
   });
 
   const getWeather = async () => {
@@ -72,29 +68,8 @@ import { useWeather } from '~/composables/useWeather';
     try {
       await fetchWeatherData(city.value);
       showGuidelines.value = false;
-      updateBackgroundClass();
     } catch (err) {
       console.error('Failed to fetch weather data:', err);
-    }
-  };
-
-  const updateBackgroundClass = () => {
-    if (!weather.value) return;
-    
-    const weatherCondition = weather.value.weather[0].main.toLowerCase();
-    switch (weatherCondition) {
-      case 'clear':
-        backgroundClass.value = 'sunny-background';
-        break;
-      case 'rain':
-      case 'drizzle':
-        backgroundClass.value = 'rainy-background';
-        break;
-      case 'clouds':
-        backgroundClass.value = 'cloudy-background';
-        break;
-      default:
-        backgroundClass.value = '';
     }
   };
 </script>
@@ -104,6 +79,8 @@ import { useWeather } from '~/composables/useWeather';
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
+    position: relative;
+    z-index: 1;
   }
 
   .language-switcher {
@@ -157,60 +134,5 @@ import { useWeather } from '~/composables/useWeather';
     background-color: #fee;
     border-radius: 4px;
     color: #c00;
-  }
-
-  .sunny-background {
-    background: linear-gradient(to bottom, #87ceeb, #ffd700);
-    animation: sunnyEffect 15s linear infinite;
-  }
-
-  .rainy-background {
-    background: #3f3f3f;
-    overflow: hidden;
-  }
-
-  .rainy-background::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('/path/to/rain-drop.png');
-    background-size: contain;
-    opacity: 0.2;
-    animation: rainEffect 1s linear infinite;
-  }
-
-  .cloudy-background {
-    background: linear-gradient(to bottom, #d3d3d3, #a9a9a9);
-    animation: cloudyEffect 20s linear infinite;
-  }
-
-  @keyframes sunnyEffect {
-    0% {
-      background-position: 0 0;
-    }
-    100% {
-      background-position: 100% 100%;
-    }
-  }
-
-  @keyframes rainEffect {
-    0% {
-      transform: translateY(-100%);
-    }
-    100% {
-      transform: translateY(100%);
-    }
-  }
-
-  @keyframes cloudyEffect {
-    0% {
-      opacity: 0.8;
-    }
-    100% {
-      opacity: 1;
-    }
   }
 </style>
