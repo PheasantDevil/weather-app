@@ -39,8 +39,8 @@ const backgroundClass = computed(() => {
 }
 
 .clear-background {
-  background: linear-gradient(to bottom, #87ceeb, #ffd700);
-  animation: sunnyEffect 15s linear infinite;
+  background: linear-gradient(45deg, #87ceeb, #ffd700);
+  animation: sunnyEffect 20s ease-in-out infinite;
 }
 
 .rainy-background {
@@ -94,8 +94,39 @@ const backgroundClass = computed(() => {
 }
 
 .thunderstorm-background {
-  background: linear-gradient(to bottom, #2c3e50, #34495e);
+  background: linear-gradient(to bottom, #1a1a1a, #2c3e50);
   position: relative;
+  overflow: hidden;
+}
+
+.thunderstorm-background::before {
+  content: '';
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    transparent,
+    rgba(255, 255, 255, 0.2) 10px,
+    transparent 20px
+  );
+  animation: rainEffect 1s linear infinite;
+  pointer-events: none;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.thunderstorm-background::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  animation: lightningEffect 5s infinite;
+  pointer-events: none;
 }
 
 @keyframes sunnyEffect {
@@ -116,5 +147,17 @@ const backgroundClass = computed(() => {
 @keyframes snowEffect {
   0% { transform: translateY(0) translateZ(0) rotate(0deg); }
   100% { transform: translateY(100%) translateZ(0) rotate(360deg); }
+}
+
+@keyframes lightningEffect {
+  0%, 95%, 98% {
+    background: transparent;
+  }
+  96%, 99% {
+    background: rgba(255, 255, 255, 0.95);
+  }
+  97%, 100% {
+    background: transparent;
+  }
 }
 </style> 
