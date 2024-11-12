@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue';
+  import { computed, watchEffect } from 'vue';
   import { useI18n } from 'vue-i18n';
   import type { ForecastItem, WeatherData } from '~/types/weather';
   import { formatTime } from '~/utils/dateUtils';
@@ -58,6 +58,27 @@
   const formatTemperature = (temp: number): string => {
     return `${temp.toFixed(1)}°C`;
   };
+
+  const preloadWeatherIcons = () => {
+    if (!props.weather || !props.forecast) return;
+    
+    // 現在の天気アイコン
+    const currentIcon = props.weather.weather[0].icon;
+    new Image().src = getWeatherIconUrl(currentIcon);
+    
+    // 予報のアイコン
+    const forecastIcons = new Set(
+      todayForecast.value.map(item => item.weather[0].icon)
+    );
+    
+    forecastIcons.forEach(icon => {
+      new Image().src = getWeatherIconUrl(icon);
+    });
+  };
+
+  watchEffect(() => {
+    preloadWeatherIcons();
+  });
 </script>
 
 <style scoped>

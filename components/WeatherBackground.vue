@@ -130,22 +130,40 @@ const backgroundClass = computed(() => {
 }
 
 @keyframes sunnyEffect {
-  0% { background-position: 0 0; }
-  100% { background-position: 100% 100%; }
+  0% { 
+    background-position: 0% 50%;
+    transform: translateZ(0);
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% { 
+    background-position: 0% 50%;
+    transform: translateZ(0);
+  }
 }
 
 @keyframes rainEffect {
-  0% { transform: translateY(0) translateZ(0); }
+  0% { transform: translateY(-100%) translateZ(0); }
   100% { transform: translateY(100%) translateZ(0); }
 }
 
 @keyframes cloudyEffect {
-  0% { opacity: 0.8; }
-  100% { opacity: 1; }
+  0% { 
+    opacity: 0.8;
+    transform: translateZ(0);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% { 
+    opacity: 0.8;
+    transform: translateZ(0);
+  }
 }
 
 @keyframes snowEffect {
-  0% { transform: translateY(0) translateZ(0) rotate(0deg); }
+  0% { transform: translateY(-100%) translateZ(0) rotate(0deg); }
   100% { transform: translateY(100%) translateZ(0) rotate(360deg); }
 }
 
