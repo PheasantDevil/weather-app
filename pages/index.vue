@@ -1,5 +1,5 @@
 <template>
-  <div class="weather-app">
+  <div :class="['weather-app', backgroundClass]">
     <LanguageSwitcher class="language-switcher" />
     <h1>{{ $t('weatherApp') }}</h1>
 
@@ -72,8 +72,29 @@ import { useWeather } from '~/composables/useWeather';
     try {
       await fetchWeatherData(city.value);
       showGuidelines.value = false;
+      updateBackgroundClass();
     } catch (err) {
       console.error('Failed to fetch weather data:', err);
+    }
+  };
+
+  const updateBackgroundClass = () => {
+    if (!weather.value) return;
+    
+    const weatherCondition = weather.value.weather[0].main.toLowerCase();
+    switch (weatherCondition) {
+      case 'clear':
+        backgroundClass.value = 'sunny-background';
+        break;
+      case 'rain':
+      case 'drizzle':
+        backgroundClass.value = 'rainy-background';
+        break;
+      case 'clouds':
+        backgroundClass.value = 'cloudy-background';
+        break;
+      default:
+        backgroundClass.value = '';
     }
   };
 </script>
