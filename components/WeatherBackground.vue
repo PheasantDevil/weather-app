@@ -35,6 +35,7 @@ const backgroundClass = computed(() => {
   position: relative;
   min-height: 100vh;
   transition: background 0.5s ease;
+  will-change: transform;
 }
 
 .clear-background {
@@ -61,6 +62,9 @@ const backgroundClass = computed(() => {
     transparent 20px
   );
   animation: rainEffect 1s linear infinite;
+  pointer-events: none;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .cloudy-background {
@@ -84,6 +88,9 @@ const backgroundClass = computed(() => {
   background: radial-gradient(circle at center, white 2px, transparent 3px);
   background-size: 50px 50px;
   animation: snowEffect 10s linear infinite;
+  pointer-events: none;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .thunderstorm-background {
@@ -97,8 +104,8 @@ const backgroundClass = computed(() => {
 }
 
 @keyframes rainEffect {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(100%); }
+  0% { transform: translateY(0) translateZ(0); }
+  100% { transform: translateY(100%) translateZ(0); }
 }
 
 @keyframes cloudyEffect {
@@ -107,7 +114,7 @@ const backgroundClass = computed(() => {
 }
 
 @keyframes snowEffect {
-  0% { transform: translateY(0) rotate(0deg); }
-  100% { transform: translateY(100%) rotate(360deg); }
+  0% { transform: translateY(0) translateZ(0) rotate(0deg); }
+  100% { transform: translateY(100%) translateZ(0) rotate(360deg); }
 }
 </style> 

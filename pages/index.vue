@@ -14,7 +14,9 @@
             required
           />
           <button type="submit" :disabled="isLoading" class="submit-button">
-            {{ isLoading ? $t('loading') : $t('getWeather') }}
+            <span class="button-text">
+              {{ isLoading ? $t('loading') : $t('getWeather') }}
+            </span>
           </button>
         </div>
       </form>
@@ -91,33 +93,46 @@ import { useWeather } from '~/composables/useWeather';
     margin: 2rem 0;
   }
 
+  .search-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
   .city-input {
-    padding: 0.75rem 1rem;
-    border: 2px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    width: 100%;
-    max-width: 300px;
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
   }
 
   .submit-button {
-    padding: 0.75rem 1.5rem;
-    background-color: #0066cc;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    white-space: nowrap;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .submit-button:hover:not(:disabled) {
-    background-color: #0052a3;
+  .button-text {
+    display: inline-block;
+    transition: transform 0.2s;
   }
 
-  .submit-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+  .submit-button:hover .button-text {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 480px) {
+    .search-container {
+      flex-direction: column;
+    }
+
+    .city-input,
+    .submit-button {
+      width: 100%;
+      max-width: none;
+    }
   }
 
   .guidelines {

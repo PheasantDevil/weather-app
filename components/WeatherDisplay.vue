@@ -129,4 +129,35 @@
     font-size: 0.9rem;
     margin: 0.25rem 0;
   }
+
+  @media (max-width: 768px) {
+    .current-weather {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .weather-info {
+      text-align: center;
+    }
+
+    .today-forecast {
+      padding: 1rem;
+      justify-content: flex-start;
+    }
+
+    .forecast-item {
+      min-width: 70px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .weather-icon {
+      width: 80px;
+      height: 80px;
+    }
+
+    .temperature {
+      font-size: 1.2rem;
+    }
+  }
 </style>
