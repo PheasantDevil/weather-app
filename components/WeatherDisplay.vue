@@ -8,13 +8,7 @@
           :alt="weather.weather[0].description"
           class="weather-icon"
         />
-        <div
-          :class="[
-            'weather-display',
-            backgroundClass,
-            { 'animated-background': isAnimated },
-          ]"
-        >
+        <div class="weather-info">
           <p class="temperature">
             {{ $t('temperature') }}: {{ formatTemperature(weather.main.temp) }}
           </p>
@@ -43,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue';
+  import { computed, watchEffect } from 'vue';
   import { useI18n } from 'vue-i18n';
   import type { ForecastItem, WeatherData } from '~/types/weather';
   import { formatTime } from '~/utils/dateUtils';
@@ -65,24 +59,25 @@
     return `${temp.toFixed(1)}°C`;
   };
 
-  const backgroundClass = computed(() => {
-    const icon = props.weather?.weather[0].icon;
-    switch (icon) {
-      case '10d':
-      case '10n':
-        return 'rainy-background';
-      case '01d':
-        return 'sunny-background';
-      // 他の天気条件に応じたクラス名を追加
-      default:
-        return 'default-background';
-    }
-  });
+  const preloadWeatherIcons = () => {
+    if (!props.weather || !props.forecast) return;
+    
+    // 現在の天気アイコン
+    const currentIcon = props.weather.weather[0].icon;
+    new Image().src = getWeatherIconUrl(currentIcon);
+    
+    // 予報のアイコン
+    const forecastIcons = new Set(
+      todayForecast.value.map(item => item.weather[0].icon)
+    );
+    
+    forecastIcons.forEach(icon => {
+      new Image().src = getWeatherIconUrl(icon);
+    });
+  };
 
-  const isAnimated = computed(() => {
-    const icon = props.weather?.weather[0].icon;
-    // アニメーションが必要な天気コードを指定
-    return ['10d', '10n', '01d', '01n'].includes(icon);
+  watchEffect(() => {
+    preloadWeatherIcons();
   });
 </script>
 
@@ -156,57 +151,34 @@
     margin: 0.25rem 0;
   }
 
-  /* 晴れの背景 */
-  .sunny-background {
-    background: linear-gradient(to bottom, #87ceeb, #f0e68c);
-    animation: sunnyEffect 20s linear infinite;
-  }
-
-  /* 雨の背景 */
-  .rainy-background {
-    background: #a0a0a0;
-    overflow: hidden;
-  }
-
-  /* 雨のアニメーション */
-  .rainy-background::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('/path/to/rain-drop.png'); /* 雨粒画像を指定 */
-    background-size: contain;
-    opacity: 0.3;
-    animation: rainEffect 0.5s linear infinite;
-  }
-
-  /* デフォルト背景 */
-  .default-background {
-    background: #d3d3d3;
-  }
-
-  /* アニメーション定義 */
-  @keyframes sunnyEffect {
-    from {
-      background-position: 0 0;
+  @media (max-width: 768px) {
+    .current-weather {
+      flex-direction: column;
+      text-align: center;
     }
-    to {
-      background-position: 100% 100%;
+
+    .weather-info {
+      text-align: center;
+    }
+
+    .today-forecast {
+      padding: 1rem;
+      justify-content: flex-start;
+    }
+
+    .forecast-item {
+      min-width: 70px;
     }
   }
 
-  @keyframes rainEffect {
-    0% {
-      transform: translateY(-100%);
+  @media (max-width: 480px) {
+    .weather-icon {
+      width: 80px;
+      height: 80px;
     }
-    100% {
-      transform: translateY(100%);
-    }
-  }
 
-  .animated-background {
-    transition: background 0.5s ease-in-out;
+    .temperature {
+      font-size: 1.2rem;
+    }
   }
 </style>
