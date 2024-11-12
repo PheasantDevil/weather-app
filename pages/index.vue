@@ -5,7 +5,7 @@
       <h1>{{ $t('weatherApp') }}</h1>
 
       <form @submit.prevent="getWeather" class="search-form">
-        <div :class="['weather-app']">
+        <div class="search-container">
           <input
             v-model="city"
             :placeholder="$t('enterCity')"

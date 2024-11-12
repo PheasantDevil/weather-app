@@ -8,13 +8,7 @@
           :alt="weather.weather[0].description"
           class="weather-icon"
         />
-        <div
-          :class="[
-            'weather-display',
-            backgroundClass,
-            { 'animated-background': isAnimated },
-          ]"
-        >
+        <div class="weather-info">
           <p class="temperature">
             {{ $t('temperature') }}: {{ formatTemperature(weather.main.temp) }}
           </p>
