@@ -37,95 +37,148 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
-import type { WeatherData, ForecastItem } from '~/types/weather';
-import { getWeatherIconUrl } from '~/utils/weatherUtils';
-import { formatTime } from '~/utils/dateUtils';
+  import { computed, watchEffect } from 'vue';
+  import { useI18n } from 'vue-i18n';
+  import type { ForecastItem, WeatherData } from '~/types/weather';
+  import { formatTime } from '~/utils/dateUtils';
+  import { getWeatherIconUrl } from '~/utils/weatherUtils';
 
-const props = defineProps<{
-  weather: WeatherData;
-  forecast: ForecastItem[];
-}>();
+  const props = defineProps<{
+    weather: WeatherData;
+    forecast: ForecastItem[];
+  }>();
 
-const { locale } = useI18n();
+  const { locale } = useI18n();
 
-const todayForecast = computed(() => {
-  const today = new Date().toISOString().split('T')[0];
-  return props.forecast.filter(item => item.dt_txt.startsWith(today));
-});
+  const todayForecast = computed(() => {
+    const today = new Date().toISOString().split('T')[0];
+    return props.forecast.filter(item => item.dt_txt.startsWith(today));
+  });
 
-const formatTemperature = (temp: number): string => {
-  return `${temp.toFixed(1)}°C`;
-};
+  const formatTemperature = (temp: number): string => {
+    return `${temp.toFixed(1)}°C`;
+  };
+
+  const preloadWeatherIcons = () => {
+    if (!props.weather || !props.forecast) return;
+    
+    // 現在の天気アイコン
+    const currentIcon = props.weather.weather[0].icon;
+    new Image().src = getWeatherIconUrl(currentIcon);
+    
+    // 予報のアイコン
+    const forecastIcons = new Set(
+      todayForecast.value.map(item => item.weather[0].icon)
+    );
+    
+    forecastIcons.forEach(icon => {
+      new Image().src = getWeatherIconUrl(icon);
+    });
+  };
+
+  watchEffect(() => {
+    preloadWeatherIcons();
+  });
 </script>
 
 <style scoped>
-.weather-display {
-  padding: 1rem;
-  border-radius: 8px;
-  background-color: #f8f9fa;
-  margin: 1rem 0;
-}
+  .weather-display {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    margin: 1rem 0;
+  }
 
-.weather-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
+  .weather-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 
-.current-weather {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
+  .current-weather {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
 
-.weather-icon {
-  width: 100px;
-  height: 100px;
-}
+  .weather-icon {
+    width: 100px;
+    height: 100px;
+  }
 
-.weather-info {
-  text-align: left;
-}
+  .weather-info {
+    text-align: left;
+  }
 
-.temperature {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
+  .temperature {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
 
-.description {
-  text-transform: capitalize;
-}
+  .description {
+    text-transform: capitalize;
+  }
 
-.feels-like {
-  color: #666;
-  font-size: 0.9rem;
-}
+  .feels-like {
+    color: #666;
+    font-size: 0.9rem;
+  }
 
-.today-forecast {
-  display: flex;
-  overflow-x: auto;
-  gap: 1rem;
-  padding: 1rem 0;
-}
+  .today-forecast {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
 
-.forecast-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 80px;
-}
+  .forecast-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+  }
 
-.forecast-icon {
-  width: 50px;
-  height: 50px;
-}
+  .forecast-icon {
+    width: 50px;
+    height: 50px;
+  }
 
-.time, .temp {
-  font-size: 0.9rem;
-  margin: 0.25rem 0;
-}
+  .time,
+  .temp {
+    font-size: 0.9rem;
+    margin: 0.25rem 0;
+  }
+
+  @media (max-width: 768px) {
+    .current-weather {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .weather-info {
+      text-align: center;
+    }
+
+    .today-forecast {
+      padding: 1rem;
+      justify-content: flex-start;
+    }
+
+    .forecast-item {
+      min-width: 70px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .weather-icon {
+      width: 80px;
+      height: 80px;
+    }
+
+    .temperature {
+      font-size: 1.2rem;
+    }
+  }
 </style>
