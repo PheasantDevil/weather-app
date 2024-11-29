@@ -6420,7 +6420,7 @@ __metadata:
     nuxt: "npm:^3.12.4"
     path-browserify: "npm:^1.0.1"
     repopack: "npm:^0.1.43"
-    vite: "npm:^5.4.4"
+    vite: "npm:^6.0.0"
     vue: "npm:^3.4.38"
   languageName: unknown
   linkType: soft
@@ -8916,7 +8916,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^5.0.0 || ^6.0.0":
+"vite@npm:^5.0.0 || ^6.0.0, vite@npm:^6.0.0":
   version: 6.0.1
   resolution: "vite@npm:6.0.1"
   dependencies:
@@ -8968,7 +8968,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^5.4.11, vite@npm:^5.4.4":
+"vite@npm:^5.4.11":
   version: 5.4.11
   resolution: "vite@npm:5.4.11"
   dependencies:
