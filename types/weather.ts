@@ -9,6 +9,7 @@ export interface Temperature {
   temp_min?: number;
   temp_max?: number;
   humidity?: number;
+  pressure?: number;
 }
 
 export interface WeatherData {

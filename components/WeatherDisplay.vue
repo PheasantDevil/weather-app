@@ -19,6 +19,10 @@
             {{ $t('feelsLike') }}:
             {{ formatTemperature(weather.main.feels_like) }}
           </p>
+          <!-- デバッグ用に気圧データを表示 -->
+          <p v-if="weather.main.pressure" class="debug">
+            Pressure: {{ weather.main.pressure }} hPa
+          </p>
         </div>
       </div>
       <div class="today-forecast">
@@ -61,16 +65,16 @@
 
   const preloadWeatherIcons = () => {
     if (!props.weather || !props.forecast) return;
-    
+
     // 現在の天気アイコン
     const currentIcon = props.weather.weather[0].icon;
     new Image().src = getWeatherIconUrl(currentIcon);
-    
+
     // 予報のアイコン
     const forecastIcons = new Set(
       todayForecast.value.map(item => item.weather[0].icon)
     );
-    
+
     forecastIcons.forEach(icon => {
       new Image().src = getWeatherIconUrl(icon);
     });
