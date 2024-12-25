@@ -19,12 +19,11 @@
             {{ $t('feelsLike') }}:
             {{ formatTemperature(weather.main.feels_like) }}
           </p>
-          <!-- デバッグ用に気圧データを表示 -->
-          <p v-if="weather.main.pressure" class="debug">
-            Pressure: {{ weather.main.pressure }} hPa
-          </p>
         </div>
       </div>
+
+      <PressureDisplay :weather="weather" />
+
       <div class="today-forecast">
         <div v-for="item in todayForecast" :key="item.dt" class="forecast-item">
           <p class="time">{{ formatTime(item.dt_txt, locale) }}</p>
@@ -43,6 +42,7 @@
 <script setup lang="ts">
   import { computed, watchEffect } from 'vue';
   import { useI18n } from 'vue-i18n';
+  import PressureDisplay from '~/components/PressureDisplay.vue';
   import type { ForecastItem, WeatherData } from '~/types/weather';
   import { formatTime } from '~/utils/dateUtils';
   import { getWeatherIconUrl } from '~/utils/weatherUtils';
