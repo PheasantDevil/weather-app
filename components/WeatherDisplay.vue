@@ -22,7 +22,15 @@
         </div>
       </div>
 
-      <PressureDisplay :weather="weather" />
+      <!-- 気圧情報セクション -->
+      <div class="pressure-section">
+        <PressureDisplay :weather="weather" />
+        <PressureGraph
+          :forecast="forecast"
+          :current-pressure="weather.main.pressure"
+          class="pressure-graph-container"
+        />
+      </div>
 
       <div class="today-forecast">
         <div v-for="item in todayForecast" :key="item.dt" class="forecast-item">
@@ -43,6 +51,7 @@
   import { computed, watchEffect } from 'vue';
   import { useI18n } from 'vue-i18n';
   import PressureDisplay from '~/components/PressureDisplay.vue';
+  import PressureGraph from '~/components/PressureGraph.vue';
   import type { ForecastItem, WeatherData } from '~/types/weather';
   import { formatTime } from '~/utils/dateUtils';
   import { getWeatherIconUrl } from '~/utils/weatherUtils';
@@ -115,6 +124,22 @@
     text-align: left;
   }
 
+  /* 気圧情報セクションのスタイル */
+  .pressure-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .pressure-graph-container {
+    height: 300px;
+    width: 100%;
+  }
+
   .temperature {
     font-size: 1.5rem;
     font-weight: bold;
@@ -165,6 +190,14 @@
       text-align: center;
     }
 
+    .pressure-section {
+      padding: 0.5rem;
+    }
+
+    .pressure-graph-container {
+      height: 250px;
+    }
+
     .today-forecast {
       padding: 1rem;
       justify-content: flex-start;
@@ -183,6 +216,10 @@
 
     .temperature {
       font-size: 1.2rem;
+    }
+
+    .pressure-graph-container {
+      height: 200px;
     }
   }
 </style>
