@@ -31,18 +31,6 @@
           class="pressure-graph-container"
         />
       </div>
-
-      <div class="today-forecast">
-        <div v-for="item in todayForecast" :key="item.dt" class="forecast-item">
-          <p class="time">{{ formatTime(item.dt_txt, locale) }}</p>
-          <img
-            :src="getWeatherIconUrl(item.weather[0].icon)"
-            :alt="item.weather[0].description"
-            class="forecast-icon"
-          />
-          <p class="temp">{{ formatTemperature(item.main.temp) }}</p>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -53,7 +41,6 @@
   import PressureDisplay from '~/components/PressureDisplay.vue';
   import PressureGraph from '~/components/PressureGraph.vue';
   import type { ForecastItem, WeatherData } from '~/types/weather';
-  import { formatTime } from '~/utils/dateUtils';
   import { getWeatherIconUrl } from '~/utils/weatherUtils';
 
   const props = defineProps<{
@@ -133,6 +120,7 @@
     border-radius: 8px;
     padding: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 4rem;
   }
 
   .pressure-graph-container {

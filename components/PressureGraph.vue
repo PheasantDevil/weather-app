@@ -49,9 +49,9 @@
 
   // 気圧変化の閾値定義
   const PRESSURE_THRESHOLDS = {
-    MILD: -0.5, // 1時間あたり0.5hPa以上の低下
-    MODERATE: -1, // 1時間あたり1hPa以上の低下
-    SEVERE: -2, // 1時間あたり2hPa以上の低下
+    MILD: -0.025, // 1時間あたり0.5hPa以上の低下
+    MODERATE: -0.05, // 1時間あたり1hPa以上の低下
+    SEVERE: -0.1, // 1時間あたり2hPa以上の低下
   };
 
   // 線形補間を行う関数
