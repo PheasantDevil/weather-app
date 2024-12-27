@@ -14,6 +14,9 @@
     "kana": "• Hiragana and katakana are currently not supported (update planned)",
     "error": "• If you see a red error message, the results may not be accurate"
   },
+  "pressure": {
+    "title": "Atmospheric Pressure"
+  },
   "errors": {
     "API_ERROR": "Failed to fetch weather data: {message}",
     "CITY_NOT_FOUND": "City not found. Please try again.",
