@@ -21,16 +21,15 @@
           </p>
         </div>
       </div>
-      <div class="today-forecast">
-        <div v-for="item in todayForecast" :key="item.dt" class="forecast-item">
-          <p class="time">{{ formatTime(item.dt_txt, locale) }}</p>
-          <img
-            :src="getWeatherIconUrl(item.weather[0].icon)"
-            :alt="item.weather[0].description"
-            class="forecast-icon"
-          />
-          <p class="temp">{{ formatTemperature(item.main.temp) }}</p>
-        </div>
+
+      <!-- 気圧情報セクション -->
+      <div class="pressure-section">
+        <PressureDisplay :weather="weather" />
+        <PressureGraph
+          :forecast="forecast"
+          :current-pressure="weather.main.pressure"
+          class="pressure-graph-container"
+        />
       </div>
     </div>
   </div>
@@ -39,8 +38,9 @@
 <script setup lang="ts">
   import { computed, watchEffect } from 'vue';
   import { useI18n } from 'vue-i18n';
+  import PressureDisplay from '~/components/PressureDisplay.vue';
+  import PressureGraph from '~/components/PressureGraph.vue';
   import type { ForecastItem, WeatherData } from '~/types/weather';
-  import { formatTime } from '~/utils/dateUtils';
   import { getWeatherIconUrl } from '~/utils/weatherUtils';
 
   const props = defineProps<{
@@ -61,16 +61,16 @@
 
   const preloadWeatherIcons = () => {
     if (!props.weather || !props.forecast) return;
-    
+
     // 現在の天気アイコン
     const currentIcon = props.weather.weather[0].icon;
     new Image().src = getWeatherIconUrl(currentIcon);
-    
+
     // 予報のアイコン
     const forecastIcons = new Set(
       todayForecast.value.map(item => item.weather[0].icon)
     );
-    
+
     forecastIcons.forEach(icon => {
       new Image().src = getWeatherIconUrl(icon);
     });
@@ -109,6 +109,23 @@
 
   .weather-info {
     text-align: left;
+  }
+
+  /* 気圧情報セクションのスタイル */
+  .pressure-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 4rem;
+  }
+
+  .pressure-graph-container {
+    height: 300px;
+    width: 100%;
   }
 
   .temperature {
@@ -161,6 +178,14 @@
       text-align: center;
     }
 
+    .pressure-section {
+      padding: 0.5rem;
+    }
+
+    .pressure-graph-container {
+      height: 250px;
+    }
+
     .today-forecast {
       padding: 1rem;
       justify-content: flex-start;
@@ -179,6 +204,10 @@
 
     .temperature {
       font-size: 1.2rem;
+    }
+
+    .pressure-graph-container {
+      height: 200px;
     }
   }
 </style>

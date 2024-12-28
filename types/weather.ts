@@ -9,8 +9,9 @@ export interface Temperature {
   temp_min?: number;
   temp_max?: number;
   humidity?: number;
+  pressure: number; // 追加: 気圧データ
+  pressure_trend?: string; // 追加: 気圧変化トレンド（後で使用）
 }
-
 export interface WeatherData {
   name: string;
   main: Temperature;
